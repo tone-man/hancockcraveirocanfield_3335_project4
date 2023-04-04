@@ -3,7 +3,7 @@ import numpy as np # Used for arrays, matrices, and high-level math functions.
 import matplotlib.pyplot as plt # Used for graphics and visuals.
 import os # Helps with operating system
 
-def preproccess() -> pd.DataFrame :
+def preproccess() -> pd.DataFrame:
         
     # Set Pandas options to display more columns
     pd.options.display.max_columns = 50
@@ -17,9 +17,6 @@ def preproccess() -> pd.DataFrame :
     # Replaces NaN with -1 to represent no input to help with over fitting the data on columns where NaN's are common
     df['Cloud9am'] = df['Cloud9am'].fillna(-1)
     df['Cloud3pm'] = df['Cloud3pm'].fillna(-1)
-
-    # For other columns with missing values, fill them in with column mean
-    df = df.fillna(df.mean())
 
     # Create a flag for RainToday and RainTomorrow, note RainTomorrowFlag will be our target variable
     df['RainTodayFlag'] = df['RainToday'].apply(lambda x: 1 if x == 'Yes' else 0).astype(float)
@@ -40,6 +37,9 @@ def preproccess() -> pd.DataFrame :
                                                 [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
     df['WindDir3pm'] = df['WindDir3pm'].replace(['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'], 
                                                 [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
+    
+    # For other columns with missing values, fill them in with column mean
+    df = df.fillna(df.mean())
 
     # Make new column by getting the average of MinTemp and Maxtemp
     df['AvgTemp'] = df[['MinTemp', 'MaxTemp','Temp9am', 'Temp3pm']].mean(axis = 1)
@@ -48,5 +48,5 @@ def preproccess() -> pd.DataFrame :
     df['AvgHumidity'] = df[['Humidity9am', 'Humidity3pm']].mean(axis = 1)
     df['AvgPressure'] = df[['Pressure9am', 'Pressure3pm']].mean(axis = 1)
     df['AvgCloud'] = df[['Cloud9am', 'Cloud3pm']].mean(axis = 1)
-
+    
     return df
