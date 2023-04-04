@@ -24,10 +24,10 @@ print(Location_list)
 
 df = preproccess()
 
-df.shape()
 
-X = df.iloc[:, 0:24]
-y = df.iloc[:, 24]
+
+X = df.loc[:, df.columns != 'RainTomorrowFlag']
+y = df.iloc[:, 18]
 y = np.where(y == 0, 0, 1) # Needs to happen to change from a dataframe to numpy array used for Train test split
 
 mms = MinMaxScaler()
@@ -35,6 +35,10 @@ mms.fit(X)
 Xmm = mms.transform(X)
 
 X_train, X_test, y_train, y_test = train_test_split(Xmm, y, stratify = y, test_size = 0.2, random_state = 0)
+
+print(X_train.shape, X_test.shape)
+print(y_train.shape, y_test.shape)
+
 
 
 
