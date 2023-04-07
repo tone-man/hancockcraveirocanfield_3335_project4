@@ -93,7 +93,7 @@ class LogisticRegressionSGD:
         error = (target - output)
         self.w_ += self.eta * 2.0 * xi * (error)
         self.b_ += self.eta * 2.0 * error
-        loss = (-y.dot(np.log(output)) - (1 - y).dot(np.log(1 - output))) / X.shape[0]
+        loss = (-y + np.dot(np.log(output)) - (1 - y) * np.dot(np.log(1 - output))) / X.shape[0]
       
         return loss
     

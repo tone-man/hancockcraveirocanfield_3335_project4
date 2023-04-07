@@ -19,8 +19,8 @@ def preproccess() -> pd.DataFrame:
     df['Cloud3pm'] = df['Cloud3pm'].fillna(-1)
 
     # Create a flag for RainToday and RainTomorrow, note RainTomorrowFlag will be our target variable
-    df['RainTodayFlag'] = df['RainToday'].apply(lambda x: 1 if x == 'Yes' else 0).astype(float)
-    df['RainTomorrowFlag'] = df['RainTomorrow'].apply(lambda x: 1 if x == 'Yes' else 0).astype(float)
+    df['RainTodayFlag'] = df['RainToday'].apply(lambda x: 1 if x == 'Yes' else 0)
+    df['RainTomorrowFlag'] = df['RainTomorrow'].apply(lambda x: 1 if x == 'Yes' else 0)
 
     # Drop Date, Location(maybe change this), Evaporation, and Sunshine Columns
     # Also dropping RainToday, and RainTomorrow since we made numerical flag variables for them
@@ -48,5 +48,6 @@ def preproccess() -> pd.DataFrame:
     df['AvgHumidity'] = df[['Humidity9am', 'Humidity3pm']].mean(axis = 1)
     df['AvgPressure'] = df[['Pressure9am', 'Pressure3pm']].mean(axis = 1)
     df['AvgCloud'] = df[['Cloud9am', 'Cloud3pm']].mean(axis = 1)
+   
     
     return df
