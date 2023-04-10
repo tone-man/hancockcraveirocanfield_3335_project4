@@ -28,7 +28,7 @@ mms.fit(X)
 Xmm = mms.transform(X)
 
 # Splits the data into 70% for the training and 30% for the testing sets. the .astype ensures that there are no continous numbers in the array.
-X_train, X_test, y_train, y_test = train_test_split(Xmm, y, stratify = y, test_size = 0.3, random_state = 0)
+X_train, X_test, y_train, y_test = train_test_split(Xmm, y, stratify = y, test_size = 0.25, random_state = 0)
 y_train = y_train.astype(int)
 y_test = y_test.astype(int)
 
@@ -36,58 +36,64 @@ y_test = y_test.astype(int)
 print(X_train.shape, X_test.shape)
 print(y_train.shape, y_test.shape)
 
-## Creating the basic models (SVR LogReg, MLP NN) for classifying data.
+## Training the models (SVR LogReg, MLP NN) for classifying data.
+def SVRModel():
+# SVR MODEL
+    SVR_basic = LinearSVR(C = 50, epsilon = .1, random_state = 0)
+    trained_SVR = SVR_basic.fit(X_train, y_train)
+    return trained_SVR
+def LogRegModel():
+# LOGISTIC REGRESSION MODEL
+    LogReg = LogisticRegression(penalty = 'l2', C = 50, solver = 'liblinear',  random_state = 0, max_iter = 500)
+    trained_LogReg = LogReg.fit(X_train, y_train)
+    return trained_LogReg
 
-## SVR MODEL
-SVR_basic = LinearSVR(random_state = 0, max_iter = 700, tol = 1e-4)
-SVR_basic.fit(X_train, y_train)
-y_pred = SVR_basic.predict(X_test).astype(int)
+def MLPModel():
+# NN through sklearn using MLP classifier
+    mlp_basic = MLPClassifier(hidden_layer_sizes = (30, 20, 15), learning_rate = 'adaptive', random_state = 0)
+    trained_MLP = mlp_basic.fit(X_train, y_train)
+    return trained_MLP
 
+trained_SVR = SVRModel()
+trained_LogReg = LogRegModel()
+trained_MLP = MLPModel()
+
+y_pred = trained_SVR.predict(X_test).astype(int)
 for i in range(len(y_pred)):
     if y_pred[i] >= 1:
         y_pred[i] = 1    
     else:
         y_pred[i] = 0      
 
-print("The Accuracy of the model is", accuracy_score(y_test, y_pred))
-print("The coefficents are", SVR_basic.coef_)
-print("The intercept is", SVR_basic.intercept_)
+print("The SVR intercept is", '%.4f'%(trained_SVR.intercept_))
+print("The SVR coefficents are", trained_SVR.coef_)
+print("The SVR Accuracy of the model is", '%.4f'%(accuracy_score(y_test, y_pred)))
 
+y_pred2 = trained_LogReg.predict(X_test).astype(int)
+print("LogReg accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred2)))
+
+y_pred3 = trained_MLP.predict(X_test)
+print("MLP accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred3)))
+
+
+### Confusion matrix display dode for reference
+"""
 SVR_basic_cf_matrix = confusion_matrix(y_test, y_pred)
 # dispSVR = ConfusionMatrixDisplay(SVR_basic_cf_matrix, )
 SVRcmd = ConfusionMatrixDisplay(SVR_basic_cf_matrix, display_labels = ['Yes', 'No'])
 SVRcmd.plot()
 SVRcmd.ax_.set(xlabel = 'Predicted', ylabel = 'True', title = 'SVR will it rain tomorrow')
-plt.show()
 
-
-
-# LOGISTIC REGRESSION MODEL
-
-LogReg = LogisticRegression(penalty = None, random_state = 1)
-LogReg.fit(X_train, y_train)
-y_pred2 = LogReg.predict(X_test).astype(int)
 
 LogR_cf_matrix = confusion_matrix(y_test, y_pred2)
 LogRegcmd = ConfusionMatrixDisplay(LogR_cf_matrix, display_labels = ['Yes', 'No'])
 LogRegcmd.plot(cmap = 'inferno')
 LogRegcmd.ax_.set(xlabel = 'Predicted', ylabel = 'True', title = 'LogReg will it rain tomorrow')
-plt.show()
-print("LogReg accuracy is ", accuracy_score(y_test, y_pred2))
 
-
-                     
-
-# NN through sklearn using MLP classifier
-mlp_basic = MLPClassifier(hidden_layer_sizes = (20, 10), activation = 'relu', random_state = 12358)
-mlp_basic.fit(X_train, y_train)
-y_pred3 = mlp_basic.predict(X_test)
-# print(mlp_basic.n_layers_) #Print out how many layers were used. The answer - 2 will tell you the number of hidden layers. 
 
 MLPcf_matrix = confusion_matrix(y_test, y_pred3)
 MLPcmd = ConfusionMatrixDisplay(MLPcf_matrix)
 MLPcmd.plot(cmap = 'ocean')
 MLPcmd.ax_.set(xlabel = 'Predicted', ylabel = 'True', title = 'MLP will it rain tomorrow')
 plt.show()
-print("MLP accuracy is ", accuracy_score(y_test, y_pred3))
-print("done")
+"""
