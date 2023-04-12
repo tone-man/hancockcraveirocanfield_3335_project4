@@ -110,31 +110,31 @@ for i in range(10):
     X_test, y_test = getNewTestData()
     y_pred, y_pred2, y_pred3 = testModel(X_test, y_test)
     
-f, axes = plt.subplots(1, 3, figsize = (13, 5)) # Used to put the plots/confusion matrix on the same row
+    f, axes = plt.subplots(1, 3, figsize = (13, 5)) # Used to put the plots/confusion matrix on the same row
 
-# Confusion Maxtrix for Basic AdalineSGD classifier
-cf_matrix = confusion_matrix(y_test, y_pred)
-disp = ConfusionMatrixDisplay(cf_matrix, display_labels = ['Yes', 'No'])
-disp.plot(ax = axes[0], xticks_rotation = 45, cmap = 'Blues')
-disp.ax_.set_title('SVR will it rain tomorrow')
-disp.ax_.set_xlabel('Predicted')
-disp.ax_.set_ylabel('True')
+    # Confusion Maxtrix for Basic AdalineSGD classifier
+    cf_matrix = confusion_matrix(y_test, y_pred)
+    disp = ConfusionMatrixDisplay(cf_matrix, display_labels = ['Yes', 'No'])
+    disp.plot(ax = axes[0], xticks_rotation = 45, cmap = 'Blues')
+    disp.ax_.set_title('SVR will it rain tomorrow')
+    disp.ax_.set_xlabel('Predicted')
+    disp.ax_.set_ylabel('True')
 
-# Confusion Matrix for Basic LogisticRegressionSGD classifier
-cf_matrix2 = confusion_matrix(y_test, y_pred2)
-disp2 = ConfusionMatrixDisplay(cf_matrix2, display_labels = ['Yes', 'No'])
-disp2.plot(ax = axes[1], xticks_rotation = 45, cmap = 'Accent')
-disp2.ax_.set_title('LogReg will it rain tomorrow')
-disp2.ax_.set_xlabel('Predicted')
-disp2.ax_.set_ylabel('True')
+    # Confusion Matrix for Basic LogisticRegressionSGD classifier
+    cf_matrix2 = confusion_matrix(y_test, y_pred2)
+    disp2 = ConfusionMatrixDisplay(cf_matrix2, display_labels = ['Yes', 'No'])
+    disp2.plot(ax = axes[1], xticks_rotation = 45, cmap = 'Accent')
+    disp2.ax_.set_title('LogReg will it rain tomorrow')
+    disp2.ax_.set_xlabel('Predicted')
+    disp2.ax_.set_ylabel('True')
 
-# Confusion Matrix for Basic LogisticRegressionSGD classifier
-cf_matrix2 = confusion_matrix(y_test, y_pred3)
-disp2 = ConfusionMatrixDisplay(cf_matrix2, display_labels = ['Yes', 'No'])
-disp2.plot(ax = axes[2], xticks_rotation = 45, cmap = 'Reds')
-disp2.ax_.set_title('MLP will it rain tomorrow')
-disp2.ax_.set_xlabel('Predicted')
-disp2.ax_.set_ylabel('True')
-plt.subplots_adjust(wspace = 0.30, hspace = 0.5)
+    # Confusion Matrix for Basic LogisticRegressionSGD classifier
+    cf_matrix3 = confusion_matrix(y_test, y_pred3)
+    disp3 = ConfusionMatrixDisplay(cf_matrix2, display_labels = ['Yes', 'No'])
+    disp3.plot(ax = axes[2], xticks_rotation = 45, cmap = 'Reds')
+    disp3.ax_.set_title('MLP will it rain tomorrow')
+    disp3.ax_.set_xlabel('Predicted')
+    disp3.ax_.set_ylabel('True')
+    plt.subplots_adjust(wspace = 0.30, hspace = 0.5)
 
-plt.plot()
+    plt.show()

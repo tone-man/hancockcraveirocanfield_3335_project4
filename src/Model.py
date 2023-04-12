@@ -23,9 +23,9 @@ def SVRModel(X_train, y_train):
 # SVR MODEL
     SVR_basic = LinearSVR(C = 50, epsilon = .1, random_state = 0)
     trained_SVR = SVR_basic.fit(X_train, y_train)
-    numbers = SVRModel.coef_
+    numbers = SVR_basic.coef_
 
-    print("The SVR intercept is", '%.4f'%(SVRModel.intercept_))
+    print("The SVR intercept is", '%.4f'%(SVR_basic.intercept_))
     print("The SVR coefficents are ")
     for i in range(24):
         print(columns[i],":", '%.4f'%(numbers[i]))
@@ -35,7 +35,7 @@ def LogRegModel(X_train, y_train):
 # LOGISTIC REGRESSION MODEL
     LogReg = LogisticRegression(penalty = 'l2', C = 50, solver = 'liblinear',  random_state = 0, max_iter = 500)
     trained_LogReg = LogReg.fit(X_train, y_train)
-    print("The LogReg probabilites are ", LogRegModel.get_params(deep=True))
+    print("The LogReg probabilites are ", LogReg.get_params(deep=True))
 
     return trained_LogReg
 
