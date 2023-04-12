@@ -71,7 +71,7 @@ cf_matrix = confusion_matrix(y_test, y_pred)
 disp = ConfusionMatrixDisplay(cf_matrix, display_labels = ['Yes', 'No'])
 disp.plot(ax = axes[0], xticks_rotation = 45, cmap = 'Blues')
 disp.ax_.set_title('SVR will it rain tomorrow')
-disp.ax_.set_xlabel('')
+disp.ax_.set_xlabel('Predicted')
 disp.ax_.set_ylabel('True')
 
 
@@ -80,7 +80,7 @@ cf_matrix2 = confusion_matrix(y_test, y_pred2)
 disp2 = ConfusionMatrixDisplay(cf_matrix2, display_labels = ['Yes', 'No'])
 disp2.plot(ax = axes[1], xticks_rotation = 45, cmap = 'Accent')
 disp2.ax_.set_title('LogReg will it rain tomorrow')
-disp2.ax_.set_xlabel('')
+disp2.ax_.set_xlabel('Predicted')
 disp2.ax_.set_ylabel('True')
 
 # Confusion Matrix for Basic LogisticRegressionSGD classifier
@@ -88,10 +88,9 @@ cf_matrix2 = confusion_matrix(y_test, y_pred3)
 disp2 = ConfusionMatrixDisplay(cf_matrix2, display_labels = ['Yes', 'No'])
 disp2.plot(ax = axes[2], xticks_rotation = 45, cmap = 'Reds')
 disp2.ax_.set_title('MLP will it rain tomorrow')
-disp2.ax_.set_xlabel('')
+disp2.ax_.set_xlabel('Predicted')
 disp2.ax_.set_ylabel('True')
-f.text(0.45, 0, 'Predicted', ha = 'left')
-plt.subplots_adjust(wspace = 0.30, hspace = 0.1)
+plt.subplots_adjust(wspace = 0.30, hspace = 0.5)
 
 plt.show()
 
