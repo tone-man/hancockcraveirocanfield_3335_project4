@@ -25,6 +25,7 @@ def SVRModel(X_train, y_train):
     trained_SVR = SVR_basic.fit(X_train, y_train)
     numbers = SVR_basic.coef_
 
+    print("\nLinear Support Vector Regression Model Trained")
     print("The SVR intercept is", '%.4f'%(SVR_basic.intercept_))
     print("The SVR coefficents are ")
     for i in range(24):
@@ -35,6 +36,8 @@ def LogRegModel(X_train, y_train):
 # LOGISTIC REGRESSION MODEL
     LogReg = LogisticRegression(penalty = 'l2', C = 50, solver = 'liblinear',  random_state = 0, max_iter = 500)
     trained_LogReg = LogReg.fit(X_train, y_train)
+    
+    print("\nLogistic Regression Model Trained")
     print("The LogReg probabilites are ", LogReg.get_params(deep=True))
 
     return trained_LogReg
@@ -43,6 +46,8 @@ def MLPModel(X_train, y_train):
 # NN through sklearn using MLP classifier
     mlp_basic = MLPClassifier(hidden_layer_sizes = (30, 20, 15), learning_rate = 'adaptive', random_state = 0)
     trained_MLP = mlp_basic.fit(X_train, y_train)
+    
+    print("\nMulti-Layer Perceptron Model Trained")
     return trained_MLP
 
 

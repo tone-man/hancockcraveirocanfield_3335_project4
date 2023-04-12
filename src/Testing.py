@@ -88,11 +88,8 @@ print("\n       TRAINING MODELS")
 print("------------------------------")
 
 SVRModel = SVRModel(X_train, y_train)
-print("SVR Model Trained")
 LogRegModel = LogRegModel(X_train, y_train)
-print("LogReg Model Trained")
 MLPModel = MLPModel(X_train, y_train)
-print("MLP Model Trained")
 
 print("\n       TESTING MODELS")
 print("------------------------------")
@@ -103,7 +100,7 @@ X_test = None
 y_pred = None
 y_pred2 = None
 y_pred3 = None
-for i in range(10):
+for i in range(11):
     print("\n\t       RUN " + str(i))
     print("------------------------------")
 
@@ -112,6 +109,7 @@ for i in range(10):
     
     f, axes = plt.subplots(1, 3, figsize = (13, 5)) # Used to put the plots/confusion matrix on the same row
 
+    # Plot the confustion matrixes for run i
     # Confusion Maxtrix for Basic AdalineSGD classifier
     cf_matrix = confusion_matrix(y_test, y_pred)
     disp = ConfusionMatrixDisplay(cf_matrix, display_labels = ['Yes', 'No'])
