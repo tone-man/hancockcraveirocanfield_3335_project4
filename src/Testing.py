@@ -44,7 +44,7 @@ print(y_train.shape, y_test.shape)
 
 SVRModel = SVRModel(X_train, y_train)
 LogRegModel = LogRegModel(X_train, y_train)
-#MLPModel = MLPModel(X_train, y_train)
+MLPModel = MLPModel(X_train, y_train)
 
 y_pred = SVRModel.predict(X_test).astype(int)
 for i in range(len(y_pred)):
@@ -60,8 +60,8 @@ print("The SVR Accuracy of the model is", '%.4f'%(accuracy_score(y_test, y_pred)
 y_pred2 = LogRegModel.predict(X_test).astype(int)
 print("LogReg accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred2)))
 
-#y_pred3 = MLPModel.predict(X_test)
-#print("MLP accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred3)))
+y_pred3 = MLPModel.predict(X_test)
+print("MLP accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred3)))
 
 
 f, axes = plt.subplots(1, 3, figsize = (13, 5)) # Used to put the plots/confusion matrix on the same row
@@ -91,10 +91,6 @@ disp2.ax_.set_title('MLP will it rain tomorrow')
 disp2.ax_.set_xlabel('Predicted')
 disp2.ax_.set_ylabel('True')
 plt.subplots_adjust(wspace = 0.30, hspace = 0.5)
-
-for i in range(10):
-    X_test, y_test = getNewTestData()
-    testModel(X_test, y_test)
   
 def getNewTestData():
     '''
@@ -115,7 +111,7 @@ def getNewTestData():
     
     return X_test, y_test
 
-def testModels(X_test, y_test):
+def testModel(X_test, y_test):
     '''
     Tests the models against a given test set
     '''
@@ -132,3 +128,7 @@ def testModels(X_test, y_test):
 
     y_pred3 = MLPModel.predict(X_test)
     print("MLP accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred3)))
+
+for i in range(10):
+    X_test, y_test = getNewTestData()
+    testModel(X_test, y_test)
