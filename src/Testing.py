@@ -12,6 +12,8 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.svm import LinearSVR
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, accuracy_score
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 
 
 from Model import SVRModel, LogRegModel, MLPModel
@@ -61,39 +63,35 @@ print("MLP accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred3)))
 
 
 
-### Confusion matrix display dode for reference
-SVR_basic_cf_matrix = confusion_matrix(y_test, y_pred)
-SVRcmd = ConfusionMatrixDisplay(SVR_basic_cf_matrix, display_labels = ['Yes', 'No'])
-SVRcmd.plot()
-SVRcmd.ax_.set(xlabel = 'Predicted', ylabel = 'True', title = 'SVR will it rain tomorrow')
+
+f, axes = plt.subplots(1, 3, figsize = (13, 5)) # Used to put the plots/confusion matrix on the same row
+
+# Confusion Maxtrix for Basic AdalineSGD classifier
+cf_matrix = confusion_matrix(y_test, y_pred)
+disp = ConfusionMatrixDisplay(cf_matrix, display_labels = ['Yes', 'No'])
+disp.plot(ax = axes[0], xticks_rotation = 45, cmap = 'Blues')
+disp.ax_.set_title('SVR will it rain tomorrow')
+disp.ax_.set_xlabel('')
+disp.ax_.set_ylabel('True')
 
 
-LogR_cf_matrix = confusion_matrix(y_test, y_pred2)
-LogRegcmd = ConfusionMatrixDisplay(LogR_cf_matrix, display_labels = ['Yes', 'No'])
-LogRegcmd.plot(cmap = 'inferno')
-LogRegcmd.ax_.set(xlabel = 'Predicted', ylabel = 'True', title = 'LogReg will it rain tomorrow')
+# Confusion Matrix for Basic LogisticRegressionSGD classifier
+cf_matrix2 = confusion_matrix(y_test, y_pred2)
+disp2 = ConfusionMatrixDisplay(cf_matrix2, display_labels = ['Yes', 'No'])
+disp2.plot(ax = axes[1], xticks_rotation = 45, cmap = 'Accent')
+disp2.ax_.set_title('LogReg will it rain tomorrow')
+disp2.ax_.set_xlabel('')
+disp2.ax_.set_ylabel('True')
 
+# Confusion Matrix for Basic LogisticRegressionSGD classifier
+cf_matrix2 = confusion_matrix(y_test, y_pred3)
+disp2 = ConfusionMatrixDisplay(cf_matrix2, display_labels = ['Yes', 'No'])
+disp2.plot(ax = axes[2], xticks_rotation = 45, cmap = 'Reds')
+disp2.ax_.set_title('MLP will it rain tomorrow')
+disp2.ax_.set_xlabel('')
+disp2.ax_.set_ylabel('True')
+f.text(0.45, 0, 'Predicted', ha = 'left')
+plt.subplots_adjust(wspace = 0.30, hspace = 0.1)
 
-MLPcf_matrix = confusion_matrix(y_test, y_pred3)
-MLPcmd = ConfusionMatrixDisplay(MLPcf_matrix)
-MLPcmd.plot(cmap = 'ocean')
-MLPcmd.ax_.set(xlabel = 'Predicted', ylabel = 'True', title = 'MLP will it rain tomorrow')
 plt.show()
 
-def initGUI(g):
-    windoe = tk.Tk()
-    length = 1200
-    width = 700
-    dimension = str(length) + 'x' + str(width)
-    # Creating window color is not white so we can see the images
-    # Creating a Frame to view the images
-    windoe.geometry(dimension)  
-    windoe.title('3335_Project4')
-    windoe.configure(background = 'white')
-
-    gobutton = tk.Button(windoe, text = 'Go', width = 10, font = my_font1, command = lambda: button_click(stepcounter, g, labels, windoe))
-
-    gobutton.grid(row = 7, column = 6, padx = 20, pady = 35, sticky = (N, S, E, W))
-
-
-    windoe.mainloop() 
