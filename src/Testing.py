@@ -18,6 +18,9 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 
 from Model import SVRModel, LogRegModel, MLPModel
+#TODO Rename Testing to ModelVisualizer
+#TODO Add Neural Net Data
+#TODO Plot the results
 
 def getNewTestData():
     '''
@@ -48,13 +51,15 @@ def testModel(X_test, y_test):
             y_pred[i] = 1    
         else:
             y_pred[i] = 0      
-    print("The SVR Accuracy of the model is", '%.4f'%(accuracy_score(y_test, y_pred)))
+    print("SVR Accuracy: ", '%.4f'%(accuracy_score(y_test, y_pred)))
 
     y_pred2 = LogRegModel.predict(X_test).astype(int)
-    print("LogReg accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred2)))
+    print("LogReg Accuracy: ", '%.4f'%(accuracy_score(y_test, y_pred2)))
 
     y_pred3 = MLPModel.predict(X_test)
-    print("MLP accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred3)))
+    print("MLP: ", '%.4f'%(accuracy_score(y_test, y_pred3)))
+    
+    return y_pred, y_pred2, y_pred3
 
 
 # MAIN METHOD
@@ -79,35 +84,31 @@ X_train, X_test, y_train, y_test = train_test_split(scaled_data, y, stratify = y
 y_train = y_train.astype(int)
 y_test = y_test.astype(int)
 
-# Double checks to see if the split has the same number of rows and columns 
-print(X_train.shape, X_test.shape)
-print(y_train.shape, y_test.shape)
+print("\n       TRAINING MODELS")
+print("------------------------------")
 
 SVRModel = SVRModel(X_train, y_train)
+print("SVR Model Trained")
 LogRegModel = LogRegModel(X_train, y_train)
+print("LogReg Model Trained")
 MLPModel = MLPModel(X_train, y_train)
+print("MLP Model Trained")
 
-y_pred = SVRModel.predict(X_test).astype(int)
-for i in range(len(y_pred)):
-    if y_pred[i] >= 1:
-        y_pred[i] = 1    
-    else:
-        y_pred[i] = 0      
-
-print("The SVR intercept is", '%.4f'%(SVRModel.intercept_))
-print("The SVR coefficents are", SVRModel.coef_)
-print("The SVR Accuracy of the model is", '%.4f'%(accuracy_score(y_test, y_pred)))
-
-y_pred2 = LogRegModel.predict(X_test).astype(int)
-print("LogReg accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred2)))
-
-y_pred3 = MLPModel.predict(X_test)
-print("MLP accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred3)))
+print("\n       TESTING MODELS")
+print("------------------------------")
 
 #Run multiple tests
+y_test = None
+X_test = None
+y_pred = None
+y_pred2 = None
+y_pred3 = None
 for i in range(10):
+    print("\n\t       RUN " + str(i))
+    print("------------------------------")
+
     X_test, y_test = getNewTestData()
-    testModel(X_test, y_test)
+    y_pred, y_pred2, y_pred3 = testModel(X_test, y_test)
     
 f, axes = plt.subplots(1, 3, figsize = (13, 5)) # Used to put the plots/confusion matrix on the same row
 
@@ -136,3 +137,4 @@ disp2.ax_.set_xlabel('Predicted')
 disp2.ax_.set_ylabel('True')
 plt.subplots_adjust(wspace = 0.30, hspace = 0.5)
 
+plt.plot()
