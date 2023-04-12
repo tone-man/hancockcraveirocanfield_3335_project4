@@ -9,6 +9,7 @@ from Preprocessor import preproccess
 from sklearn.model_selection import train_test_split # Used for splitting data
 from sklearn.preprocessing import MinMaxScaler # Used for scaling data
 from sklearn.preprocessing import StandardScaler # Used also for scaling data 
+from sklearn.preprocessing import MaxAbsScaler # Used also for scaling data
 from sklearn.neural_network import MLPClassifier
 from sklearn.svm import LinearSVR
 from sklearn.linear_model import LogisticRegression
@@ -98,11 +99,11 @@ def getNewTestData():
     scalar, fits the contents of the data, and randomly slices it.
     '''
     #Generating scaled data
-    transformerArray = [MinMaxScaler(), StandardScaler(), ABVScalar()]
+    transformerArray = [MinMaxScaler(), StandardScaler(), MaxAbsScaler()]
 
-    transformer = tranformerArray[random.getInt(0, len(tranformerArray) - 1)]
+    transformer = transformerArray[random.randint(0, len(transformerArray) - 1)]
     transformer.fit(X)
-    scaled_data = transformer.transfrom(X)
+    scaled_data = transformer.transform(X)
     
     #Split the scaled data
     X_train, X_test, y_train, y_test = train_test_split(scaled_data, y, stratify = y, test_size = 0.25, random_state = random.randint(0, 9999))
