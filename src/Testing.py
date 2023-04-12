@@ -19,80 +19,6 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationTool
 
 from Model import SVRModel, LogRegModel, MLPModel
 
-# Calling the preproccess function to get all the preprocessing code and store it into a new dataframe variable
-
-df = preproccess() #dataFrame of csv data + additional data
-columns = df.columns #columns for data
-
-# Splits the data to the label that you predict on (y) and all other columns to predict with (X)
-X = df.loc[:, df.columns != 'RainTomorrowFlag']
-y = df.iloc[:, 18]
-y = np.where(y == 0, 0, 1).astype(int) # Needs to happen to change from a dataframe to numpy array used for Train test split
-
-# Scales the all data to a range of 0 - 1 for training
-transformer = MinMaxScaler()
-transformer.fit(X)
-scaled_data = transformer.transform(X)
-
-# Splits the data into 70% for the training and 30% for the testing sets. the .astype ensures that there are no continous numbers in the array.
-X_train, X_test, y_train, y_test = train_test_split(scaled_data, y, stratify = y, test_size = 0.25, random_state = 0)
-y_train = y_train.astype(int)
-y_test = y_test.astype(int)
-
-# Double checks to see if the split has the same number of rows and columns 
-print(X_train.shape, X_test.shape)
-print(y_train.shape, y_test.shape)
-
-SVRModel = SVRModel(X_train, y_train)
-LogRegModel = LogRegModel(X_train, y_train)
-MLPModel = MLPModel(X_train, y_train)
-
-y_pred = SVRModel.predict(X_test).astype(int)
-for i in range(len(y_pred)):
-    if y_pred[i] >= 1:
-        y_pred[i] = 1    
-    else:
-        y_pred[i] = 0      
-
-print("The SVR intercept is", '%.4f'%(SVRModel.intercept_))
-print("The SVR coefficents are", SVRModel.coef_)
-print("The SVR Accuracy of the model is", '%.4f'%(accuracy_score(y_test, y_pred)))
-
-y_pred2 = LogRegModel.predict(X_test).astype(int)
-print("LogReg accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred2)))
-
-y_pred3 = MLPModel.predict(X_test)
-print("MLP accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred3)))
-
-
-f, axes = plt.subplots(1, 3, figsize = (13, 5)) # Used to put the plots/confusion matrix on the same row
-
-# Confusion Maxtrix for Basic AdalineSGD classifier
-cf_matrix = confusion_matrix(y_test, y_pred)
-disp = ConfusionMatrixDisplay(cf_matrix, display_labels = ['Yes', 'No'])
-disp.plot(ax = axes[0], xticks_rotation = 45, cmap = 'Blues')
-disp.ax_.set_title('SVR will it rain tomorrow')
-disp.ax_.set_xlabel('Predicted')
-disp.ax_.set_ylabel('True')
-
-
-# Confusion Matrix for Basic LogisticRegressionSGD classifier
-cf_matrix2 = confusion_matrix(y_test, y_pred2)
-disp2 = ConfusionMatrixDisplay(cf_matrix2, display_labels = ['Yes', 'No'])
-disp2.plot(ax = axes[1], xticks_rotation = 45, cmap = 'Accent')
-disp2.ax_.set_title('LogReg will it rain tomorrow')
-disp2.ax_.set_xlabel('Predicted')
-disp2.ax_.set_ylabel('True')
-
-# Confusion Matrix for Basic LogisticRegressionSGD classifier
-cf_matrix2 = confusion_matrix(y_test, y_pred3)
-disp2 = ConfusionMatrixDisplay(cf_matrix2, display_labels = ['Yes', 'No'])
-disp2.plot(ax = axes[2], xticks_rotation = 45, cmap = 'Reds')
-disp2.ax_.set_title('MLP will it rain tomorrow')
-disp2.ax_.set_xlabel('Predicted')
-disp2.ax_.set_ylabel('True')
-plt.subplots_adjust(wspace = 0.30, hspace = 0.5)
-  
 def getNewTestData():
     '''
     Creates a new testing data set to use for the model. Randomly picks a
@@ -130,6 +56,82 @@ def testModel(X_test, y_test):
     y_pred3 = MLPModel.predict(X_test)
     print("MLP accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred3)))
 
-for i in range(10):
-    X_test, y_test = getNewTestData()
-    testModel(X_test, y_test)
+def main():
+    # Calling the preproccess function to get all the preprocessing code and store it into a new dataframe variable
+
+    df = preproccess() #dataFrame of csv data + additional data
+    columns = df.columns #columns for data
+
+    # Splits the data to the label that you predict on (y) and all other columns to predict with (X)
+    X = df.loc[:, df.columns != 'RainTomorrowFlag']
+    y = df.iloc[:, 18]
+    y = np.where(y == 0, 0, 1).astype(int) # Needs to happen to change from a dataframe to numpy array used for Train test split
+
+    # Scales the all data to a range of 0 - 1 for training
+    transformer = MinMaxScaler()
+    transformer.fit(X)
+    scaled_data = transformer.transform(X)
+
+    # Splits the data into 70% for the training and 30% for the testing sets. the .astype ensures that there are no continous numbers in the array.
+    X_train, X_test, y_train, y_test = train_test_split(scaled_data, y, stratify = y, test_size = 0.25, random_state = 0)
+    y_train = y_train.astype(int)
+    y_test = y_test.astype(int)
+
+    # Double checks to see if the split has the same number of rows and columns 
+    print(X_train.shape, X_test.shape)
+    print(y_train.shape, y_test.shape)
+
+    SVRModel = SVRModel(X_train, y_train)
+    LogRegModel = LogRegModel(X_train, y_train)
+    MLPModel = MLPModel(X_train, y_train)
+
+    y_pred = SVRModel.predict(X_test).astype(int)
+    for i in range(len(y_pred)):
+        if y_pred[i] >= 1:
+            y_pred[i] = 1    
+        else:
+            y_pred[i] = 0      
+
+    print("The SVR intercept is", '%.4f'%(SVRModel.intercept_))
+    print("The SVR coefficents are", SVRModel.coef_)
+    print("The SVR Accuracy of the model is", '%.4f'%(accuracy_score(y_test, y_pred)))
+
+    y_pred2 = LogRegModel.predict(X_test).astype(int)
+    print("LogReg accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred2)))
+
+    y_pred3 = MLPModel.predict(X_test)
+    print("MLP accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred3)))
+
+    #Run multiple tests
+    for i in range(10):
+        X_test, y_test = getNewTestData()
+        testModel(X_test, y_test)
+        
+    f, axes = plt.subplots(1, 3, figsize = (13, 5)) # Used to put the plots/confusion matrix on the same row
+
+    # Confusion Maxtrix for Basic AdalineSGD classifier
+    cf_matrix = confusion_matrix(y_test, y_pred)
+    disp = ConfusionMatrixDisplay(cf_matrix, display_labels = ['Yes', 'No'])
+    disp.plot(ax = axes[0], xticks_rotation = 45, cmap = 'Blues')
+    disp.ax_.set_title('SVR will it rain tomorrow')
+    disp.ax_.set_xlabel('Predicted')
+    disp.ax_.set_ylabel('True')
+
+    # Confusion Matrix for Basic LogisticRegressionSGD classifier
+    cf_matrix2 = confusion_matrix(y_test, y_pred2)
+    disp2 = ConfusionMatrixDisplay(cf_matrix2, display_labels = ['Yes', 'No'])
+    disp2.plot(ax = axes[1], xticks_rotation = 45, cmap = 'Accent')
+    disp2.ax_.set_title('LogReg will it rain tomorrow')
+    disp2.ax_.set_xlabel('Predicted')
+    disp2.ax_.set_ylabel('True')
+
+    # Confusion Matrix for Basic LogisticRegressionSGD classifier
+    cf_matrix2 = confusion_matrix(y_test, y_pred3)
+    disp2 = ConfusionMatrixDisplay(cf_matrix2, display_labels = ['Yes', 'No'])
+    disp2.plot(ax = axes[2], xticks_rotation = 45, cmap = 'Reds')
+    disp2.ax_.set_title('MLP will it rain tomorrow')
+    disp2.ax_.set_xlabel('Predicted')
+    disp2.ax_.set_ylabel('True')
+    plt.subplots_adjust(wspace = 0.30, hspace = 0.5)
+    
+main()
