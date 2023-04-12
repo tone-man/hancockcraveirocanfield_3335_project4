@@ -14,9 +14,31 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, accuracy_s
 
 from Model import SVRModel, LogRegModel, MLPModel
 
-SVRModel = SVRModel()
-LogRegModel = LogRegModel()
-MLPModel = MLPModel()
+# Calling the preproccess function to get all the preprocessing code and store it into a new dataframe variable
+df = preproccess()
+
+# Splits the data to the label that you predict on (y) and all othr columns to predict with (X)
+X = df.loc[:, df.columns != 'RainTomorrowFlag']
+y = df.iloc[:, 18]
+y = np.where(y == 0, 0, 1).astype(int) # Needs to happen to change from a dataframe to numpy array used for Train test split
+
+# Scales the all data to a range of 0 - 1
+mms = MinMaxScaler()
+mms.fit(X)
+Xmm = mms.transform(X)
+
+# Splits the data into 70% for the training and 30% for the testing sets. the .astype ensures that there are no continous numbers in the array.
+X_train, X_test, y_train, y_test = train_test_split(Xmm, y, stratify = y, test_size = 0.25, random_state = 0)
+y_train = y_train.astype(int)
+y_test = y_test.astype(int)
+
+# Double checks to see if the split has the same number of rows and columns 
+print(X_train.shape, X_test.shape)
+print(y_train.shape, y_test.shape)
+
+SVRModel = SVRModel(X_train, y_train)
+LogRegModel = LogRegModel(X_train, y_train)
+MLPModel = MLPModel(X_train, y_train)
 
 ### Confusion matrix display dode for reference
 SVR_basic_cf_matrix = confusion_matrix(y_test, y_pred)
