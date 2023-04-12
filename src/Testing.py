@@ -42,6 +42,25 @@ SVRModel = SVRModel(X_train, y_train)
 LogRegModel = LogRegModel(X_train, y_train)
 MLPModel = MLPModel(X_train, y_train)
 
+y_pred = SVRModel.predict(X_test).astype(int)
+for i in range(len(y_pred)):
+    if y_pred[i] >= 1:
+        y_pred[i] = 1    
+    else:
+        y_pred[i] = 0      
+
+print("The SVR intercept is", '%.4f'%(SVRModel.intercept_))
+print("The SVR coefficents are", SVRModel.coef_)
+print("The SVR Accuracy of the model is", '%.4f'%(accuracy_score(y_test, y_pred)))
+
+y_pred2 = LogRegModel.predict(X_test).astype(int)
+print("LogReg accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred2)))
+
+y_pred3 = MLPModel.predict(X_test)
+print("MLP accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred3)))
+
+
+
 ### Confusion matrix display dode for reference
 SVR_basic_cf_matrix = confusion_matrix(y_test, y_pred)
 SVRcmd = ConfusionMatrixDisplay(SVR_basic_cf_matrix, display_labels = ['Yes', 'No'])

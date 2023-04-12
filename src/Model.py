@@ -31,25 +31,3 @@ def MLPModel(X_train, y_train):
     mlp_basic = MLPClassifier(hidden_layer_sizes = (30, 20, 15), learning_rate = 'adaptive', random_state = 0)
     trained_MLP = mlp_basic.fit(X_train, y_train)
     return trained_MLP
-
-trained_SVR = SVRModel()
-trained_LogReg = LogRegModel()
-trained_MLP = MLPModel()
-
-y_pred = trained_SVR.predict(X_test).astype(int)
-for i in range(len(y_pred)):
-    if y_pred[i] >= 1:
-        y_pred[i] = 1    
-    else:
-        y_pred[i] = 0      
-
-print("The SVR intercept is", '%.4f'%(trained_SVR.intercept_))
-print("The SVR coefficents are", trained_SVR.coef_)
-print("The SVR Accuracy of the model is", '%.4f'%(accuracy_score(y_test, y_pred)))
-
-y_pred2 = trained_LogReg.predict(X_test).astype(int)
-print("LogReg accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred2)))
-
-y_pred3 = trained_MLP.predict(X_test)
-print("MLP accuracy is ", '%.4f'%(accuracy_score(y_test, y_pred3)))
-
