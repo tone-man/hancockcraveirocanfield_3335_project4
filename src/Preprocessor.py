@@ -4,7 +4,10 @@ import matplotlib.pyplot as plt # Used for graphics and visuals.
 import os # Helps with operating system
 
 def preproccess() -> pd.DataFrame:
-        
+    '''
+    Loads the csvFile and provides a nice pd.Dataframe, with additional
+    averages and scrapping of bad data fields.
+    '''
     # Set Pandas options to display more columns
     pd.options.display.max_columns = 50
 
